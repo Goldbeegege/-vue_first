@@ -2,8 +2,11 @@
 <div class="wrapper">
   <div class="container">    
       <form class="form-signin" autocomplete="off">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="username" class="sr-only">Email address</label>
+        <div>
+        <span><strong>现在注册!</strong></span>
+        <span style="float:right">有账号了?<router-link to="/login">登录吧!</router-link></span>
+        </div>
+        <label for="username" class="sr-only">username</label>
         <input id="username" class="form-control" placeholder="请输入用户名" @blur="lookupUser" v-model="value_dict.username" @focus="clearError(error.username)">
         <div class="error_msg"><span v-if="error.username.error">{{error.username.msg}}</span></div>
         <label for="password" class="sr-only">Password</label>
@@ -15,7 +18,7 @@
         <label for="email" class="sr-only">Password</label>
         <input id="email" class="form-control" placeholder="请输入邮箱" @focus="clearError(error.email)" @blur="emptyValue(error,'email')" v-model="value_dict.email">
         <div class="error_msg"><span v-if="error.email.error">{{error.email.msg}}</span></div>
-        <div class="btn btn-lg btn-primary btn-block" @click="sub">Sign in</div>
+        <div class="btn btn-lg btn-primary btn-block" @click="sub">注 册</div>
       </form>
     </div>
     </div>
@@ -25,7 +28,7 @@
 $(function(){
 })
 export default {
-  name: 'Index',
+  name: 'Login',
   data () {
     return {
       value_dict:{
@@ -35,10 +38,10 @@ export default {
         email:""
       },
       error:{
-        username:{error:false,msg:"",alert:"请输入用户名"},
-        password:{error:false,msg:"",alert:"请输入密码"},
-        re_password:{error:false,msg:"",alert:"请确认密码"},
-        email:{error:false,msg:"",alert:"请输入邮箱"},
+        username:{error:false,msg:"",alert:"请输入用户名",ch_name:"用户名"},
+        password:{error:false,msg:"",alert:"请输入密码",ch_name:"密码"},
+        re_password:{error:false,msg:"",alert:"请确认密码",ch_name:"确认密码"},
+        email:{error:false,msg:"",alert:"请输入邮箱",ch_name:"邮箱"},
       }
     }
   },
@@ -88,7 +91,26 @@ export default {
       if(count==0){
         //当输入框全部输入数值时，逐个校验所输入的是否符合规范
         //1:校验用户名是否符合规范
-        that.validation_username("username")
+        let user_res = that.validation_username("username")
+        let password_res = that.validation_password("password")
+        let re_password_res = that.validation_repassword("re_password")
+        let eamil_res = that.validation_email("email")
+        if(user_res && password_res && re_password_res && eamil_res){
+          this.$axios.request({
+            url:"http://127.0.0.1:8000/register/",
+            method:"POST",
+            data:that.value_dict,
+            headers:{"content-type":"application/json"}
+          }).then(function(ret){
+            if(ret.data.code == 1000){
+              console.log("ok")
+            }
+          }).catch(function(ret){
+            console.log(ret)
+          })
+        }else{
+          return
+        }
         
       }else{
         return
@@ -96,20 +118,61 @@ export default {
     },
 
     //校验用户名
-    validation_username(label){
+    validation_username(label){      
       let username = this.value_dict[label]
       let reg = /^\w{3,16}$/
       let ret = reg.test(username)
+      let res = this.validation_rule(ret,"username",3,16)
+      return res
+    },
+
+  //校验密码
+  validation_password(label){
+      let password = this.value_dict[label]
+      let reg = /^\w{8,16}$/
+      let ret = reg.test(password)
+      let res = this.validation_rule(ret,"password",8,16)
+      return res
+    },
+
+    //校验两次密码输入是否一致
+    validation_repassword(label){
+      let re_password = this.value_dict[label]
+      let password = this.value_dict["password"]
+      if(re_password == password){
+        return true
+      }else{
+        this.error.re_password.error = true
+        this.error.re_password.msg = "两次密码输入不一致"
+        return false
+      }
+    },
+    //校验邮箱地址是否合法
+    validation_email(label){
+      let email = this.value_dict[label]
+      let reg = /^[0-9a-zA-Z_.-]+@[0-9a-zA-Z]+(\.[0-9a-zA-Z_.-])*\.[0-9a-zA-Z]{2,6}/
+      let ret = reg.test(email)
       if(!ret){
-        if (username.length < 3){
-          this.error.username.error = true
-          this.error.username.msg = "用户名长度小于3个字符"
-        }else if(username.length > 16){
-          this.error.username.error = true
-          this.error.username.msg = "用户名长度大于16个字符"
+        this.error.email.error = true
+        this.error.email.msg = "邮箱地址不正确"
+        return false
+      }else{
+        return true
+      }
+    },
+
+    //将共同的验证规则写在一起
+    validation_rule(ret,field,min_length,max_length){
+      if(!ret){
+        if (this.value_dict[field].length < min_length){
+          this.error[field]["error"] = true
+          this.error[field].msg = this.error[field]["ch_name"] + "长度小于"+min_length+"个字符"
+        }else if(field.length > max_length){
+          this.error[field].error = true
+          this.error[field].msg = this.error[field]["ch_name"]+"长度大于" +max_length+"个字符"
         }else{
-          this.error.username.error = true
-          this.error.username.msg = "用户名中只能包含数字字母或下划线"
+          this.error[field].error = true
+          this.error[field].msg = this.error[field]["ch_name"]+"中只能包含数字、字母或下划线"
         }
         return false
       }else{
@@ -134,13 +197,13 @@ li {
   height:25px;
   color:red;
 }
-.wrapper{
+/* .wrapper{
   height:100%;
   width:100%;
   background:url("../assets/img/backgrounds/1.jpg");
   background-size:cover;
    background-attachment: fixed;
-}
+} */
 
 .form-signin {
   max-width: 330px;

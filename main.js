@@ -7,9 +7,10 @@ import $ from "jquery"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
 import axios from "axios"
+import Cookies from "vue-cookies"
 
 Vue.prototype.$axios = axios
-
+Vue.prototype.Cookies = Cookies
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
