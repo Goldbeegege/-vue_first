@@ -1,27 +1,37 @@
 <template>
-<div class="wrapper">
-  <div class="container">    
-      <form class="form-signin" autocomplete="off">
-        <div>
-        <span><strong>现在注册!</strong></span>
-        <span style="float:right">有账号了?<router-link to="/login">登录吧!</router-link></span>
-        </div>
-        <label for="username" class="sr-only">username</label>
-        <input id="username" class="form-control" placeholder="请输入用户名" @blur="lookupUser" v-model="value_dict.username" @focus="clearError(error.username)">
-        <div class="error_msg"><span v-if="error.username.error">{{error.username.msg}}</span></div>
-        <label for="password" class="sr-only">Password</label>
-        <input type="password" id="Password" class="form-control" placeholder="请输入密码" @focus="clearError(error.password)" @blur="emptyValue(error,'password')" v-model="value_dict.password">
-        <div class="error_msg"><span v-if="error.password.error">{{error.password.msg}}</span></div>
-        <label for="re_password" class="sr-only">re_password</label>
-        <input type="password" id="re_password" class="form-control" placeholder="请确认密码" @focus="clearError(error.re_password)" @blur="emptyValue(error,'re_password')" v-model="value_dict.re_password">
-        <div class="error_msg"><span v-if="error.re_password.error">{{error.re_password.msg}}</span></div>
-        <label for="email" class="sr-only">Password</label>
-        <input id="email" class="form-control" placeholder="请输入邮箱" @focus="clearError(error.email)" @blur="emptyValue(error,'email')" v-model="value_dict.email">
-        <div class="error_msg"><span v-if="error.email.error">{{error.email.msg}}</span></div>
-        <div class="btn btn-lg btn-primary btn-block" @click="sub">注 册</div>
-      </form>
-    </div>
-    </div>
+<el-container>
+    <el-main>
+        <el-row>
+          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:2,offset:11}>
+            <el-input type="text" autocomplete="off" placeholder="请输入用户名" @blur="lookupUser" v-model="value_dict.username" @focus="clearError(error.username)"></el-input>
+            <div class="error_msg"><span v-if="error.username.error">{{error.username.msg}}</span></div>
+          </el-col>      
+        </el-row>
+        <el-row>
+          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:2,offset:11}>
+            <el-input  type="password" autocomplete="off" placeholder="请输入密码" @focus="clearError(error.password)" @blur="emptyValue(error,'password')" v-model="value_dict.password"></el-input>
+            <div class="error_msg"><span v-if="error.password.error">{{error.password.msg}}</span></div>
+          </el-col>              
+        </el-row> 
+        <el-row>
+          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:2,offset:11}>
+            <el-input  type="password" autocomplete="off" placeholder="请确认密码" @focus="clearError(error.re_password)" @blur="emptyValue(error,'re_password')" v-model="value_dict.re_password"></el-input>
+            <div class="error_msg"><span v-if="error.re_password.error">{{error.re_password.msg}}</span></div>
+          </el-col>              
+        </el-row>
+        <el-row>
+          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:2,offset:11}>
+            <el-input  type="email" autocomplete="off" placeholder="请输入邮箱" @focus="clearError(error.email)" @blur="emptyValue(error,'email')" v-model="value_dict.email"></el-input>
+            <div class="error_msg"><span v-if="error.email.error">{{error.email.msg}}</span></div>
+          </el-col>              
+        </el-row>    
+        <el-row>
+          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:2,offset:11}>
+            <el-button style="float:right" type="success" plain @click="sub">注册</el-button>
+          </el-col>          
+        </el-row>         
+    </el-main>
+  </el-container>
 </template>
   
 <script>
@@ -43,6 +53,11 @@ export default {
         re_password:{error:false,msg:"",alert:"请确认密码",ch_name:"确认密码"},
         email:{error:false,msg:"",alert:"请输入邮箱",ch_name:"邮箱"},
       }
+    }
+  },
+  created(){
+    if(this.$Cookies.get("is_login")){
+        this.$router.push({path:"/"})
     }
   },
   methods:{
@@ -103,7 +118,10 @@ export default {
             headers:{"content-type":"application/json"}
           }).then(function(ret){
             if(ret.data.code == 1000){
-              console.log("ok")
+              that.$Cookies.set("token",ret.data.token)
+              that.$Cookies.set("username",ret.data.username)
+              that.$Cookies.set("is_login",true)
+              that.$router.push({path:"/"})
             }
           }).catch(function(ret){
             console.log(ret)
