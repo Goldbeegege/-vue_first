@@ -20,7 +20,7 @@
         </el-row>         
     <div id="popup-captcha"></div>
     </el-main>
-  </el-container>
+  </el-container>  
 </template>
 
 <script>
@@ -117,15 +117,15 @@ export default {
           this.$axios.request({
             url:"http://127.0.0.1:8000/login/",
             method:"POST",
-            data:this.value_dict,
-            headers:{"content-type":"application/json"}
+            data:JSON.stringify(this.value_dict),
+            // headers:{"content-type":"text/plain"}
           }).then(function(ret){
             if(ret.data.code == 1000){
-              console.log(ret.data)
+              console.log(ret.data)              
               that.$Cookies.set("token",ret.data.token)
               that.$Cookies.set("is_login",true)
-              that.$Cookies.set("username",ret.data.username)              
-              if(that.$route.query){
+              that.$Cookies.set("username",ret.data.username)         
+              if(that.$route.query["backName"]){   
                 that.$router.push({name:that.$route.query["backName"]})
               }else{
                 that.$router.push({name:"index"})
@@ -183,6 +183,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

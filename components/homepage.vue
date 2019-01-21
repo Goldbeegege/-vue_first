@@ -1,88 +1,44 @@
 <template>
     <div class="home_content"> 
         <!--左侧导航栏-->
-    <el-row>   
-        <el-col :span="4">
-            <ul class="left-bar">
-                <li>
-                    <i class="el-icon-warning el-icon"></i>
-                    <span slot="title">今日待做</span>
-                </li>
-                <li>
-                    <i class="el-icon-edit-outline el-icon"></i>
-                    <span slot="title">明日计划</span>
-                </li>
-                <li>
-                    <i class="el-icon-document el-icon"></i>
-                    <span slot="title">历史记录</span>
-                </li>
-            </ul>
+        <el-row>   
+            <el-col :span="4">
+                <ul class="left-bar">
+                    <li>
+                        <i class="el-icon-warning el-icon"></i>
+                        <span slot="title">
+                            <router-link to="/homepage/">今日待做</router-link>
+                        </span>
+                    </li>
+                    <li>
+                        <i class="el-icon-edit-outline el-icon"></i>
+                        <span slot="title"><router-link to="/homepage/plan_list">明日计划</router-link></span>
+                    </li>
+                    <li>
+                        <i class="el-icon-document el-icon"></i>
+                        <span slot="title">历史记录</span>
+                    </li>
+                </ul>        
+            </el-col>
+            <!--中间内容-->
+            <el-col :xs="16" :md={span:14,offset:1} style="margin-top:20px;">
+                <router-view/>
+            </el-col>
+        </el-row>    
         
-    </el-col>
-  
-  <!--中间内容-->
-  <el-col :xs="16" :md={span:12,offset:2} style="margin-top:20px;">
-  <el-form ref="form" :model="form" label-width="100px">
-  <el-form-item label="事件名称">
-    <el-input v-model="form.title"></el-input>
-  </el-form-item>
-  <el-form-item label="大致内容">
-    <el-input type="textarea" v-model="form.detail"></el-input>
-  </el-form-item>
-  <el-form-item label="事件类型">
-      <el-select  v-model="form.region" placeholder="事件类型">
-        <el-option v-for="item in form.type" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled">
-        </el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item>
-    <el-switch  v-model="form.is_done" inactive-text="未完成" active-text="完成" inactive-color="#ff4949" active-color="#13ce66">
-    </el-switch>      
-  </el-form-item> 
-  <el-form-item label="总结一下吧" v-if="form.is_done">
-      <el-input type="textarea" v-model="form.summary"></el-input>
-  </el-form-item>
-  <el-form-item label="未完成原因" v-else="form.is_done">
-    <el-input type="textarea" v-model="form.uncompletd_reason"></el-input>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary">确定</el-button>
-  </el-form-item>
-  
-</el-form>
-</el-col>
-<!--右侧工具栏-->
-</el-row>
-
-    
-</div>
+    </div>
 </template>
 
 <script>
+import todayList from "./today_list"
 export default {
   name: 'homepage',
   data(){
      return {
-         form: {
-          title: '',
-          detail: '',
-          type: [{value:"hello",label:"world"}],
-          is_done:false,
-          uncompletd_reason:"",
-          summary: '',
-           region:""
-        }
      }
   },
-  created(){
-      this.$axios.request({
-          url:"http://127.0.0.1:8000/api/v1/backup/?token=" + this.$Cookies.get("token"), 
-          methods:"GET",
-      }).then(function(ret){
-          console.log(ret)
-      }).catch(function(ret){
-          console.log("获取数据失败")
-      })
+  components:{
+      todayList
   }
 } 
 </script>

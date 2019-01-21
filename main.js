@@ -8,6 +8,8 @@ import axios from "axios"
 import Cookies from "vue-cookies"
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import "font-awesome/css/font-awesome.min.css"
+import store from "./store/store"
 Vue.use(ElementUI);
 axios.defaults.withCredentials=true;
 Vue.prototype.$axios = axios
@@ -18,6 +20,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 });
@@ -25,7 +28,6 @@ new Vue({
 router.beforeEach(function(to,from,next){
   if(to.meta.requireAuth){
     if(Cookies.get("token")){
-      console.log("ok")
       next()
     }else{
       next({name:"login",query:{backUrl:to.fullPath}})

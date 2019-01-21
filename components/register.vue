@@ -114,8 +114,8 @@ export default {
           this.$axios.request({
             url:"http://127.0.0.1:8000/register/",
             method:"POST",
-            data:that.value_dict,
-            headers:{"content-type":"application/json"}
+            data:JSON.stringify(that.value_dict),
+            // headers:{"content-type":"text/plain"}
           }).then(function(ret){
             if(ret.data.code == 1000){
               that.$Cookies.set("token",ret.data.token)
