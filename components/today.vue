@@ -11,13 +11,13 @@
       <el-input v-model="form.type"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-switch  v-model="form.is_done" inactive-text="未完成" active-text="完成" inactive-color="#ff4949" active-color="#13ce66">
+    <el-switch  v-model="form.is_completed" inactive-text="未完成" active-text="完成" inactive-color="#ff4949" active-color="#13ce66">
     </el-switch>      
   </el-form-item> 
   <el-form-item label="总结一下吧" v-if="form.is_completed">
       <el-input type="textarea" v-model="form.summary"></el-input>
   </el-form-item>
-  <el-form-item label="未完成原因" v-else="form.is_done">
+  <el-form-item label="未完成原因" v-else>
     <el-input type="textarea" v-model="form.reason"></el-input>
   </el-form-item>
   <el-form-item>
@@ -55,6 +55,11 @@ export default {
           url:"http://127.0.0.1:8000/api/v1/completion/" + view_id + "/?token=" + this.$Cookies.get("token"), 
           methods:"GET",
       }).then(function(ret){
+          if(ret.data.is_completed == 1){
+            ret.data.is_completed = false
+          }else if(ret.data.is_completed == 0){
+            ret.data.is_completed = true
+          }
           that.form = ret.data
       }).catch(function(ret){
           console.log("获取数据失败")
@@ -63,7 +68,7 @@ export default {
   methods:{
     submit_today(){
       let that = this
-      if(!this.form.is_done){
+      if(!this.form.is_completed){
         if(this.is_pop){
             this.$alert(this.form.title + '还没有完成哦！', '没完成提醒', {
             confirmButtonText: '确定',

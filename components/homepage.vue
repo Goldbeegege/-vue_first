@@ -16,12 +16,19 @@
                     </li>
                     <li>
                         <i class="el-icon-document el-icon"></i>
-                        <span slot="title">历史记录</span>
+                        <span slot="title" @click="showHistory">历史记录</span>
+                        <el-collapse  v-if="isShow">
+                            <ul>
+                                <li><router-link to="/homepage/history/finish">完成记录</router-link></li>
+                                <li><router-link to="/homepage/history/unfinish">未完成记录</router-link></li>
+                            </ul>
+                        </el-collapse>
                     </li>
+                    
                 </ul>        
             </el-col>
             <!--中间内容-->
-            <el-col :xs="16" :md={span:14,offset:1} style="margin-top:20px;">
+            <el-col :xs="16" :md={span:14,offset:2} style="margin-top:20px;">
                 <router-view/>
             </el-col>
         </el-row>    
@@ -35,10 +42,21 @@ export default {
   name: 'homepage',
   data(){
      return {
+         isShow:false
      }
   },
   components:{
       todayList
+  },
+  created(){
+      if(this.$route.name == "finish" || this.$route.name == "unfinish"){
+          this.isShow = true
+      }
+  },
+  methods:{
+      showHistory(){
+          this.isShow = !this.isShow
+      }
   }
 } 
 </script>

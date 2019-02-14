@@ -2,31 +2,31 @@
 <el-container>
     <el-main>
         <el-row>
-          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:2,offset:11}>
+          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:6,offset:10}>
             <el-input type="text" autocomplete="off" placeholder="请输入用户名" @blur="lookupUser" v-model="value_dict.username" @focus="clearError(error.username)"></el-input>
             <div class="error_msg"><span v-if="error.username.error">{{error.username.msg}}</span></div>
           </el-col>      
         </el-row>
         <el-row>
-          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:2,offset:11}>
+          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:6,offset:10}>
             <el-input  type="password" autocomplete="off" placeholder="请输入密码" @focus="clearError(error.password)" @blur="emptyValue(error,'password')" v-model="value_dict.password"></el-input>
             <div class="error_msg"><span v-if="error.password.error">{{error.password.msg}}</span></div>
           </el-col>              
         </el-row> 
         <el-row>
-          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:2,offset:11}>
+          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:6,offset:10}>
             <el-input  type="password" autocomplete="off" placeholder="请确认密码" @focus="clearError(error.re_password)" @blur="emptyValue(error,'re_password')" v-model="value_dict.re_password"></el-input>
             <div class="error_msg"><span v-if="error.re_password.error">{{error.re_password.msg}}</span></div>
           </el-col>              
         </el-row>
         <el-row>
-          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:2,offset:11}>
+          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:6,offset:10}>
             <el-input  type="email" autocomplete="off" placeholder="请输入邮箱" @focus="clearError(error.email)" @blur="emptyValue(error,'email')" v-model="value_dict.email"></el-input>
             <div class="error_msg"><span v-if="error.email.error">{{error.email.msg}}</span></div>
           </el-col>              
         </el-row>    
         <el-row>
-          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:2,offset:11}>
+          <el-col :xs={span:10,offset:7} :sm={span:8,offset:8} :md={span:8,offset:8} :lg={span:6,offset:9} :xl={span:6,offset:10}>
             <el-button style="float:right" type="success" plain @click="sub">注册</el-button>
           </el-col>          
         </el-row>         

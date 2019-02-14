@@ -1,8 +1,6 @@
 <template>
     <div class="table">
-    <el-table :data="tableData" style="width: 100%" ref="multipleTable">
-      <el-table-column type="selection">
-      </el-table-column>
+    <el-table :data="tableData" style="width: 100%">
       <el-table-column prop="title" label="名称" align="center">
       </el-table-column>
       <el-table-column prop="type" label="类型" align="center">

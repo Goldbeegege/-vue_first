@@ -8,6 +8,8 @@ import todayList from "@/components/today_list"
 import planList from "@/components/plan_list"
 import today from "@/components/today"
 import plan from "@/components/plan"
+import finish from "@/components/finish_records"
+import unfinish from "@/components/unfinish_records"
 Vue.use(Router)
 
 export default new Router({
@@ -66,6 +68,22 @@ export default new Router({
           requireAuth:true
         }
       },  
+      {
+        path: '/homepage/history/finish',
+        name: 'finish',
+        component: finish,
+        meta:{
+          requireAuth:true
+        }
+      }, 
+      {
+        path: '/homepage/history/unfinish',
+        name: 'unfinish',
+        component: unfinish,
+        meta:{
+          requireAuth:true
+        }
+      }, 
     ]
     },
   ]
